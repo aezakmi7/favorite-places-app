@@ -4,9 +4,9 @@ const uuid = Uuid();
 
 class Place {
   Place({
-    required this.name,
+    required this.title,
   }) : id = uuid.v4();
 
   final String id;
-  final String name;
+  final String title;
 }

@@ -27,7 +27,7 @@ class PlacesList extends StatelessWidget {
       itemCount: places.length,
       itemBuilder: (context, index) => ListTile(
         title: Text(
-          places[index].name,
+          places[index].title,
           style: Theme.of(context)
               .textTheme
               .titleMedium!
