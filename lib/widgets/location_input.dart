@@ -9,6 +9,9 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
+  Location? _pickedLocation;
+  var _isGettingLocation = false;
+
   void _getCurrentLocation() async {
     Location location = Location();
 
@@ -32,11 +35,33 @@ class _LocationInputState extends State<LocationInput> {
       }
     }
 
+    setState(() {
+      _isGettingLocation = true;
+    });
+
     locationData = await location.getLocation();
+    setState(() {
+      _isGettingLocation = false;
+    });
+
+    print(locationData.latitude);
+    print(locationData.longitude);
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget previewContent = Text(
+      'No location',
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+    );
+
+    if (_isGettingLocation) {
+      previewContent = const CircularProgressIndicator();
+    }
+
     return Column(
       children: [
         Container(
@@ -46,20 +71,14 @@ class _LocationInputState extends State<LocationInput> {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 1.0),
           ),
-          child: Text(
-            'No location',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-          ),
+          child: previewContent,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             TextButton.icon(
               icon: const Icon(Icons.location_on),
-              onPressed: () {},
+              onPressed: _getCurrentLocation,
               label: const Text('Get current location'),
             ),
             TextButton.icon(
